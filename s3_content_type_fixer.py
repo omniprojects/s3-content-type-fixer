@@ -39,8 +39,12 @@ def check_headers(bucket, queue, verbose):
             print >> sys.stderr, "%s: Could not lookup" % key.name
             continue
 
+        expected_content_type = ''
         content_type = key.content_type
-        expected_content_type, _ = mimetypes.guess_type(key.name)
+        if key.name.endswith('woff2'):
+            expected_content_type = 'application/font-woff2'
+        else:
+            expected_content_type, _ = mimetypes.guess_type(key.name)
 
         if not expected_content_type:
             print >> sys.stderr, "%s: Could not guess content type" % key.name
